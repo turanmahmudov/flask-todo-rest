@@ -1,16 +1,9 @@
-from flask import Blueprint, jsonify
-from flask import request, jsonify
-from flask_jwt_extended import create_access_token
+from flask import Blueprint
+from flask_restful import Api
+from .resources import UsersResource, UsersLoginResource
 
 blueprint = Blueprint('users', __name__)
+api = Api(blueprint)
 
-@blueprint.route('/api/login', methods=('POST',))
-def login():
-    username = request.json.get("username", None)
-    password = request.json.get("password", None)
-
-    if username != "test" or password != "test":
-        return jsonify({"msg": "Bad username and password"}), 401
-
-    access_token = create_access_token(identity=username)
-    return jsonify(access_token=access_token)
+api.add_resource(UsersResource, '/api/users', '/api/users/<int:id>', endpoint='users')
+api.add_resource(UsersLoginResource, '/api/login', endpoint='user_login')

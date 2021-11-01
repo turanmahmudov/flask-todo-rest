@@ -2,7 +2,8 @@ from flask import Flask
 
 from application import tasks, users
 from application.settings import ProdConfig
-from application.jwt import jwt
+from application.extensions import jwt, db, migrate, bcrypt
+
 
 def create_app(config_object=ProdConfig):
     app = Flask(__name__)
@@ -14,5 +15,8 @@ def create_app(config_object=ProdConfig):
 
     """Extensions"""
     jwt.init_app(app)
+    db.init_app(app)
+    migrate.init_app(app, db)
+    bcrypt.init_app(app)
 
     return app
