@@ -1,4 +1,6 @@
+from distutils import util as dist_util
 import re
+
 from flask_sqlalchemy import orm
 
 
@@ -24,24 +26,32 @@ def filter_query_builder(table, filter_str):
                 column = mapper.columns[matches.group(1)]
 
                 operator = matches.group(2)
+                val = matches.group(3)
 
                 if operator == '=':
-                    generated_filter = column.__eq__(matches.group(3))
-                    print(matches.group(3))
+                    if val == "true" or val == "false":
+                        val = dist_util.strtobool(val)
+                        generated_filter = column.is_(bool(val))
+                    else:
+                        generated_filter = column.__eq__(val)
                 elif operator == '!=':
-                    generated_filter = column.__ne__(matches.group(3))
+                    if val == "true" or val == "false":
+                        val = dist_util.strtobool(val)
+                        generated_filter = column.is_not(bool(val))
+                    else:
+                        generated_filter = column.__ne__(val)
                 elif operator == '()':
-                    generated_filter = column.in_(matches.group(3).split(','))
+                    generated_filter = column.in_(val.split(','))
                 elif operator == '>=':
-                    generated_filter = column.__ge__(matches.group(3))
+                    generated_filter = column.__ge__(val)
                 elif operator == '<=':
-                    generated_filter = column.__le__(matches.group(3))
+                    generated_filter = column.__le__(val)
                 elif operator == '~':
-                    generated_filter = column.like('%'+matches.group(3)+'%')
+                    generated_filter = column.like('%'+val+'%')
                 elif operator == '>':
-                    generated_filter = column.__gt__(matches.group(3))
+                    generated_filter = column.__gt__(val)
                 elif operator == '<':
-                    generated_filter = column.__lt__(matches.group(3))
+                    generated_filter = column.__lt__(val)
 
                 if generated_filter is not None:
                     generated_filters.append(generated_filter)
