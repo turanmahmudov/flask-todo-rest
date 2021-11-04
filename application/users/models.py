@@ -8,6 +8,7 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=True)
     token = ""
+    tasks = db.relationship("Task", backref="user", lazy=True)
 
     def __init__(self, username, password=None) -> None:
         db.Model.__init__(self, username=username)

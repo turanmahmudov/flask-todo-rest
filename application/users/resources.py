@@ -6,6 +6,12 @@ parser = reqparse.RequestParser()
 parser.add_argument('username', help='This field cannot be blank', required=True)
 parser.add_argument('password', help='This field cannot be blank', required=True)
 
+task_fields = {
+    'id': fields.Integer,
+    'task': fields.String,
+    'done': fields.Boolean
+}
+
 resource_fields = {
     'username': fields.String,
     'token': fields.String
