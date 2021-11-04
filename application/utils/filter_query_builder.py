@@ -47,7 +47,7 @@ def filter_query_builder(table, filter_str):
                 elif operator == '<=':
                     generated_filter = column.__le__(val)
                 elif operator == '~':
-                    generated_filter = column.like('%'+val+'%')
+                    generated_filter = column.like(val)
                 elif operator == '>':
                     generated_filter = column.__gt__(val)
                 elif operator == '<':
