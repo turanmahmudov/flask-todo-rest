@@ -12,7 +12,7 @@ class Task(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     def __init__(self, task, done) -> None:
-        db.Model.__init__(self, task=task, done=done)
+        super().__init__(self, task=task, done=done)
 
     @classmethod
     def get_one(cls, task_id):

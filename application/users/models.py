@@ -11,7 +11,7 @@ class User(db.Model):
     tasks = db.relationship("Task", backref="user", lazy=True)
 
     def __init__(self, username, password=None) -> None:
-        db.Model.__init__(self, username=username)
+        super().__init__(self, username=username)
         if password:
             self.set_password(password)
         else:
